@@ -17,3 +17,8 @@ curl -d @request.json -X POST http://<Server>:<Port>/v1/models/model:predict
 # edit client file - as you want!
 python cli_restful.py
 ```
+
+## Test serving over gRPC Protocol with Client (cli_grpc.py)
+```
+python cli_grpc.py --server host:port
+```
