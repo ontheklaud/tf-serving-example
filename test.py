@@ -1,4 +1,5 @@
 from functools import partial
+from os import makedirs
 import tensorflow as tf
 
 
@@ -92,7 +93,6 @@ def main():
         while True:
 
             try:
-
                 # render x/y values
                 batch_x, batch_y = sess.run(get_next_batch)
                 feed_dict = dict({X: batch_x, Y: batch_y})
@@ -104,9 +104,15 @@ def main():
                 print('[{:d}] loss = {:.4f}'.format(g_step_out, loss_out))
 
             except tf.errors.OutOfRangeError:
+                # just finish this epoch
 
                 print('ep {:d} done'.format(ep+1))
                 break
+
+    # save model graph
+    saver = tf.train.Saver()
+    makedirs('model', exist_ok=True)
+    saver.save(sess=sess, save_path='model/model.ckpt', global_step=global_step)
 
     # fin
     return

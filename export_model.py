@@ -7,38 +7,30 @@ def main():
 
     # model config
     dtype = tf.float32
-    epoch = 10
-    batch = 10
-    fetch_buffer = 5
-    opt_lr = 1e-4
+    model_name = 'model'
+    model_version = 1
 
     len_X = 9
     len_Y = 1
     len_XY = len_X + len_Y
 
-    # X/Y Placeholder
+    # X/Y Placeholder and model
     X = tf.placeholder(dtype=dtype, shape=(None, len_X))
     Y = tf.placeholder(dtype=dtype, shape=(None, len_Y))
-
     net, loss = model(x=X, y=Y, in_size=len_X, out_size=len_Y)
 
+    # session restore
     sess = tf.Session()
     saver = tf.train.Saver()
-    saver_path = './model/'
+    saver_path = './model_ckpt/'
     last_ckpt_path = tf.train.latest_checkpoint(checkpoint_dir=saver_path)
-    # saver.recover_last_checkpoints(last_ckpt_path)
     saver.restore(sess=sess, save_path=last_ckpt_path)
-    # print(last_ckpt_path)
-    # import sys
-    # sys.exit()
 
     # export builder
-    makedirs('export', exist_ok=True)
-    builder = tf.saved_model.builder.SavedModelBuilder('export/model/v1')
+    builder = tf.saved_model.builder.SavedModelBuilder('{:s}/{:d}'.format(model_name, model_version))
 
     # tensor wrapping
     regression_input = tf.saved_model.utils.build_tensor_info(X)
-    # regression_output = tf.saved_model.utils.build_tensor_info([net, loss])
     regression_output = tf.saved_model.utils.build_tensor_info(net)
     regression_loss = tf.saved_model.utils.build_tensor_info(loss)
 
