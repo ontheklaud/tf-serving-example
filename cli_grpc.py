@@ -41,8 +41,8 @@ tf.app.flags.DEFINE_integer('concurrency', 1,
 tf.app.flags.DEFINE_integer('num_tests', 100, 'Number of test images')
 tf.app.flags.DEFINE_string('server', '', 'PredictionService host:port')
 tf.app.flags.DEFINE_string('work_dir', '/tmp', 'Working directory. ')
-tf.app.flags.DEFINE_integer('len_x', 9, 'length of input x')
-tf.app.flags.DEFINE_integer('len_y', 1, 'length of label y')
+tf.app.flags.DEFINE_integer('len_x', 1032, 'length of input x')
+tf.app.flags.DEFINE_integer('len_y', 2, 'length of label y')
 FLAGS = tf.app.flags.FLAGS
 
 

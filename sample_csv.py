@@ -3,7 +3,7 @@ import numpy as np
 
 def main():
 
-    factor = 10
+    factor = 1034
     random_values = 5000
 
     # open file header

@@ -26,7 +26,7 @@ def map_func(len_X, len_Y, *args):
     # change shape into: batch x column
     XY_stack = tf.stack(values=args, axis=-1)
 
-    # split X/Y for 9:1
+    # split X/Y for n_X:n_Y
     split_x, split_y = tf.split(value=XY_stack, num_or_size_splits=[len_X, len_Y], axis=-1)
 
     # debug info for shape validation
@@ -47,15 +47,15 @@ def main():
     fetch_buffer = 5
     opt_lr = 1e-4
 
-    len_X = 9
-    len_Y = 1
+    len_X = 1032
+    len_Y = 2
     len_XY = len_X + len_Y
 
-    # use CSV Dataset with... Repeat & Random Shuffling (reset per repeat) & mini Batch
+    # use CSV Dataset with... Random Shuffling (reset per repeat) & mini Batch & map
     dataset = tf.contrib.data.CsvDataset(
         filenames="sample.csv",
         record_defaults=[tf.float32 for _ in range(len_XY)],
-        select_cols=list(range(0, 10)))\
+        select_cols=list(range(0, len_X)))\
         .shuffle(buffer_size=batch*fetch_buffer)\
         .batch(batch_size=batch)\
         .map(map_func=partial(map_func, len_X, len_Y))

@@ -10,8 +10,8 @@ def main():
     model_name = 'model'
     model_version = 1
 
-    len_X = 9
-    len_Y = 1
+    len_X = 1032
+    len_Y = 2
     len_XY = len_X + len_Y
 
     # X/Y Placeholder and model
