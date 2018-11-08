@@ -1,6 +1,47 @@
 from os import makedirs
+from pprint import PrettyPrinter
+
 import tensorflow as tf
 from test import model
+
+
+def get_graph_col_dict_filtered(collection=None, filtering='in', f_list=None, verbose=False):
+
+    # filter session variables by keywords: in (IN), bound (STARTSWITH or ENDSWITH)
+    _collection = collection if collection is not None else tf.get_collection(key=tf.GraphKeys.GLOBAL_VARIABLES)
+
+    g_col_ops = dict()
+    g_col_f_ops = dict()
+    for gx in _collection:
+        gx_name = str(gx.name).replace(':0', '')
+        for f_key in f_list:
+            if filtering == 'in':
+                condition = f_key in str(gx.name)
+            elif filtering == 'bound':
+                condition = str(gx.name).startswith(f_key) or str(gx.name).endswith(f_key)
+            else:
+                print('[E] Unexpected filtering policy. exiting...')
+                return
+
+            if condition:
+                g_col_f_ops.update({gx_name: gx})
+                break
+            else:
+                continue
+        else:
+            g_col_ops.update({gx_name: gx})
+
+    if verbose:
+        pp = PrettyPrinter()
+        pp.pprint('[Unfiltered]')
+        pp.pprint(g_col_ops)
+        pp.pprint('[Filtered]')
+        pp.pprint(g_col_f_ops)
+    else:
+        pass
+
+    # fin
+    return g_col_ops, g_col_f_ops
 
 
 def main():
